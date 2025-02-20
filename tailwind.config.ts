@@ -9,8 +9,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        "brand-dark": "#1a202c", // Dark theme base
+        "brand-accent": "#3182ce", // Button/message accent
       },
     },
   },
