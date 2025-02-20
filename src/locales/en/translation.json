@@ -4,13 +4,16 @@
   "learn_more": "Learn More",
   "schedule_call": "Schedule a Call",
   "view_portfolio": "View Portfolio",
+  "quick_tour": "Quick Tour",
   "learn_more_response": "BrandBlitz makes design simple. Describe your idea, and our team (with a little help from me) brings it to life!",
   "schedule_call_info": "Non-subscribers get free 15-minute calls on weekdays at 10 AM or 2 PM. Pick a slot!",
   "select_time": "Select a Time",
   "choose_slot": "Choose a slot",
   "schedule": "Schedule",
   "back": "Back",
-  "portfolio_logo": "A sleek logo design sample.",
-  "portfolio_banner": "A vibrant banner sample.",
-  "portfolio_website": "A modern website mockup."
+  "portfolio_logo": "A sleek logo design with bold colors.",
+  "portfolio_banner": "A vibrant banner for marketing campaigns.",
+  "portfolio_website": "A modern website layout with clean lines.",
+  "tour_start": "Welcome to the Quick Tour! I’ll show you how easy it is to get started.",
+  "tour_step1": "Step 1: Just chat with me to submit a design request or explore features!"
 }

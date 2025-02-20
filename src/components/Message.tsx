@@ -16,7 +16,7 @@ const Message: React.FC<MessageProps> = ({
   handleAction,
 }) => (
   <div
-    className={`mb-4 p-2 rounded-lg max-w-xs ${
+    className={`mb-4 p-2 rounded-lg max-w-xs fade-in ${
       sender === "user"
         ? "bg-brand-accent self-end text-white ml-auto"
         : "bg-gray-700 text-white mr-auto"

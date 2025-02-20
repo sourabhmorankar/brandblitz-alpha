@@ -19,7 +19,7 @@ type Message = {
 const ChatContainer: React.FC = () => {
   const { t } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([]);
-  const [view, setView] = useState<"chat" | "sign_up" | "schedule_call" | "portfolio">("chat");
+  const [view, setView] = useState<"chat" | "sign_up" | "schedule_call" | "portfolio" | "tour">("chat");
 
   const [state, sendMessageAction, isPending] = useActionState(
     async (_prevState: Message[], formData: FormData) => {
@@ -42,6 +42,7 @@ const ChatContainer: React.FC = () => {
           { text: t("learn_more"), action: "learn_more" },
           { text: t("schedule_call"), action: "schedule_call" },
           { text: t("view_portfolio"), action: "view_portfolio" },
+          { text: t("quick_tour"), action: "quick_tour" },
         ],
         timestamp: Date.now(),
       };
@@ -75,6 +76,17 @@ const ChatContainer: React.FC = () => {
       case "view_portfolio":
         setView("portfolio");
         break;
+      case "quick_tour":
+        setView("tour");
+        setMessages((prev) => [
+          ...prev,
+          {
+            text: t("tour_start"),
+            sender: "blaze",
+            timestamp: Date.now(),
+          },
+        ]);
+        break;
       default:
         console.log(`Unhandled action: ${action}`);
     }
@@ -84,17 +96,28 @@ const ChatContainer: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen bg-brand-dark">
-      {view === "chat" ? (
-        <>
-          <MessageList messages={messages} handleAction={handleAction} />
-          <InputArea sendMessageAction={sendMessageAction} isPending={isPending} />
-        </>
-      ) : view === "sign_up" ? (
-        <SignUpForm onBack={handleBack} />
-      ) : view === "schedule_call" ? (
-        <ScheduleCallForm onBack={handleBack} />
-      ) : (
-        <PortfolioCarousel onBack={handleBack} />
+      <div className={`flex-1 view-transition ${view === "chat" ? "opacity-100" : "opacity-0"}`}>
+        {view === "chat" && (
+          <>
+            <MessageList messages={messages} handleAction={handleAction} />
+            <InputArea sendMessageAction={sendMessageAction} isPending={isPending} />
+          </>
+        )}
+      </div>
+      {view === "sign_up" && <SignUpForm onBack={handleBack} />}
+      {view === "schedule_call" && <ScheduleCallForm onBack={handleBack} />}
+      {view === "portfolio" && <PortfolioCarousel onBack={handleBack} />}
+      {view === "tour" && (
+        <div className="p-4 text-white max-w-md mx-auto">
+          <p className="mb-4">{t("tour_step1")}</p>
+          <button
+            onClick={handleBack}
+            className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600"
+            aria-label="Back to Chat"
+          >
+            {t("back")}
+          </button>
+        </div>
       )}
     </div>
   );
