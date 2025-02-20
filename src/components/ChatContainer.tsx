@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 import MessageList from "./MessageList";
 import InputArea from "./InputArea";
 import SignUpForm from "./SignUpForm";
+import ScheduleCallForm from "./ScheduleCallForm";
+import PortfolioCarousel from "./PortfolioCarousel";
 
 type Message = {
   text: string;
@@ -17,7 +19,7 @@ type Message = {
 const ChatContainer: React.FC = () => {
   const { t } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([]);
-  const [showSignUp, setShowSignUp] = useState(false);
+  const [view, setView] = useState<"chat" | "sign_up" | "schedule_call" | "portfolio">("chat");
 
   const [state, sendMessageAction, isPending] = useActionState(
     async (_prevState: Message[], formData: FormData) => {
@@ -53,27 +55,46 @@ const ChatContainer: React.FC = () => {
   }, [state]);
 
   const handleAction = (action: string) => {
-    if (action === "sign_up") {
-      setShowSignUp(true);
-    } else {
-      const response: Message = {
-        text: `You clicked ${action}. This feature is coming soon!`,
-        sender: "blaze",
-        timestamp: Date.now(),
-      };
-      setMessages((prev) => [...prev, response]);
+    switch (action) {
+      case "sign_up":
+        setView("sign_up");
+        break;
+      case "learn_more":
+        setMessages((prev) => [
+          ...prev,
+          {
+            text: t("learn_more_response"),
+            sender: "blaze",
+            timestamp: Date.now(),
+          },
+        ]);
+        break;
+      case "schedule_call":
+        setView("schedule_call");
+        break;
+      case "view_portfolio":
+        setView("portfolio");
+        break;
+      default:
+        console.log(`Unhandled action: ${action}`);
     }
   };
 
+  const handleBack = () => setView("chat");
+
   return (
     <div className="flex flex-col h-screen bg-brand-dark">
-      {showSignUp ? (
-        <SignUpForm onBack={() => setShowSignUp(false)} />
-      ) : (
+      {view === "chat" ? (
         <>
           <MessageList messages={messages} handleAction={handleAction} />
           <InputArea sendMessageAction={sendMessageAction} isPending={isPending} />
         </>
+      ) : view === "sign_up" ? (
+        <SignUpForm onBack={handleBack} />
+      ) : view === "schedule_call" ? (
+        <ScheduleCallForm onBack={handleBack} />
+      ) : (
+        <PortfolioCarousel onBack={handleBack} />
       )}
     </div>
   );

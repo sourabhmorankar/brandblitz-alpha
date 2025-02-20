@@ -1,7 +1,16 @@
 {
-    "welcome": "Hey there! Welcome to BrandBlitz. I’m Blaze, your design assistant. What would you like to do first?",
-    "sign_up": "Sign Up",
-    "learn_more": "Learn More",
-    "schedule_call": "Schedule a Call",
-    "view_portfolio": "View Portfolio"
-  }
+  "welcome": "Hey there! Welcome to BrandBlitz. I’m Blaze, your design assistant. What would you like to do first?",
+  "sign_up": "Sign Up",
+  "learn_more": "Learn More",
+  "schedule_call": "Schedule a Call",
+  "view_portfolio": "View Portfolio",
+  "learn_more_response": "BrandBlitz makes design simple. Describe your idea, and our team (with a little help from me) brings it to life!",
+  "schedule_call_info": "Non-subscribers get free 15-minute calls on weekdays at 10 AM or 2 PM. Pick a slot!",
+  "select_time": "Select a Time",
+  "choose_slot": "Choose a slot",
+  "schedule": "Schedule",
+  "back": "Back",
+  "portfolio_logo": "A sleek logo design sample.",
+  "portfolio_banner": "A vibrant banner sample.",
+  "portfolio_website": "A modern website mockup."
+}
