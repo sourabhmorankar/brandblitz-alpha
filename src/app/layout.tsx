@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import "../lib/i18n"; // Import to initialize i18next
+import "../lib/i18n";
 
 export const metadata: Metadata = {
   title: "BrandBlitz",

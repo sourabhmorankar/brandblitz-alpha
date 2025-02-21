@@ -1,13 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useActionState } from "react";
 import { useTranslation } from "react-i18next";
 import MessageList from "./MessageList";
 import InputArea from "./InputArea";
-import SignUpForm from "./SignUpForm";
-import ScheduleCallForm from "./ScheduleCallForm";
-import PortfolioCarousel from "./PortfolioCarousel";
 
 type Message = {
   text: string;
@@ -19,7 +16,10 @@ type Message = {
 const ChatContainer: React.FC = () => {
   const { t } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([]);
-  const [view, setView] = useState<"chat" | "sign_up" | "schedule_call" | "portfolio" | "tour">("chat");
+  const [currentAction, setCurrentAction] = useState<string | null>(null);
+  const [actionProgress, setActionProgress] = useState<number>(0);
+  const [displayName, setDisplayName] = useState<string>("Guest");
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
   const [state, sendMessageAction, isPending] = useActionState(
     async (_prevState: Message[], formData: FormData) => {
@@ -33,9 +33,58 @@ const ChatContainer: React.FC = () => {
       };
       const updatedMessages = [...messages, userMessage];
 
+      if (currentAction) {
+        let responseText: string;
+        switch (currentAction) {
+          case "sign_up":
+            if (actionProgress === 0) {
+              if (!text.includes("@")) {
+                responseText = t("sign_up_email_error");
+              } else {
+                setActionProgress(1);
+                responseText = t("sign_up_password_prompt");
+              }
+            } else if (actionProgress === 1) {
+              if (text.length < 8) {
+                responseText = t("sign_up_password_error");
+              } else {
+                setActionProgress(2);
+                responseText = t("sign_up_confirm_prompt");
+              }
+            } else if (actionProgress === 2) {
+              if (text !== messages[messages.length - 2].text) {
+                responseText = t("password_mismatch");
+              } else {
+                setActionProgress(3);
+                responseText = t("sign_up_name_prompt");
+              }
+            } else {
+              setDisplayName(text);
+              setCurrentAction(null);
+              setActionProgress(0);
+              responseText = t("sign_up_complete", { name: text });
+            }
+            break;
+          case "schedule_call":
+            responseText = text.match(/tomorrow/i) && (text.includes("10") || text.includes("2"))
+              ? t("schedule_call_confirm", { slot: text })
+              : t("schedule_call_error");
+            setCurrentAction(null);
+            break;
+          default:
+            responseText = "Action not recognized.";
+            setCurrentAction(null);
+        }
+        return [...updatedMessages, {
+          text: responseText,
+          sender: "blaze",
+          timestamp: Date.now(),
+        }];
+      }
+
       await new Promise((resolve) => setTimeout(resolve, 1000));
       const blazeMessage: Message = {
-        text: t("welcome"),
+        text: t("welcome", { name: displayName }),
         sender: "blaze",
         buttons: [
           { text: t("sign_up"), action: "sign_up" },
@@ -43,6 +92,7 @@ const ChatContainer: React.FC = () => {
           { text: t("schedule_call"), action: "schedule_call" },
           { text: t("view_portfolio"), action: "view_portfolio" },
           { text: t("quick_tour"), action: "quick_tour" },
+          { text: t("folder_explorer"), action: "folders" },
         ],
         timestamp: Date.now(),
       };
@@ -51,74 +101,56 @@ const ChatContainer: React.FC = () => {
     messages
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     setMessages(state);
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [state]);
 
   const handleAction = (action: string) => {
+    let responseText: string;
     switch (action) {
       case "sign_up":
-        setView("sign_up");
+        setCurrentAction("sign_up");
+        setActionProgress(0);
+        responseText = t("sign_up_email_prompt");
         break;
       case "learn_more":
-        setMessages((prev) => [
-          ...prev,
-          {
-            text: t("learn_more_response"),
-            sender: "blaze",
-            timestamp: Date.now(),
-          },
-        ]);
+        responseText = t("learn_more_response");
         break;
       case "schedule_call":
-        setView("schedule_call");
+        setCurrentAction("schedule_call");
+        responseText = t("schedule_call_info") + " " + t("schedule_call_prompt");
         break;
       case "view_portfolio":
-        setView("portfolio");
+        responseText = t("portfolio_intro") + "\n- " + t("portfolio_logo") + "\n- " + t("portfolio_banner") + "\n- " + t("portfolio_website");
         break;
       case "quick_tour":
-        setView("tour");
-        setMessages((prev) => [
-          ...prev,
-          {
-            text: t("tour_start"),
-            sender: "blaze",
-            timestamp: Date.now(),
-          },
-        ]);
+        responseText = t("tour_start") + "\n1. " + t("tour_step1") + "\n2. " + t("tour_step2") + "\n3. " + t("tour_step3");
+        break;
+      case "folders":
+        responseText = t("folder_explorer_info");
         break;
       default:
-        console.log(`Unhandled action: ${action}`);
+        responseText = "Action not recognized.";
     }
+    setMessages((prev) => [
+      ...prev,
+      {
+        text: isPending ? t("loading") : responseText,
+        sender: "blaze",
+        timestamp: Date.now(),
+      },
+    ]);
   };
 
-  const handleBack = () => setView("chat");
-
   return (
-    <div className="flex flex-col h-screen bg-brand-dark">
-      <div className={`flex-1 view-transition ${view === "chat" ? "opacity-100" : "opacity-0"}`}>
-        {view === "chat" && (
-          <>
-            <MessageList messages={messages} handleAction={handleAction} />
-            <InputArea sendMessageAction={sendMessageAction} isPending={isPending} />
-          </>
-        )}
+    <div className="chat-container">
+      <div className="p-4 border-b border-gray-700 text-center text-white text-2xl">
+        BrandBlitz Chat
       </div>
-      {view === "sign_up" && <SignUpForm onBack={handleBack} />}
-      {view === "schedule_call" && <ScheduleCallForm onBack={handleBack} />}
-      {view === "portfolio" && <PortfolioCarousel onBack={handleBack} />}
-      {view === "tour" && (
-        <div className="p-4 text-white max-w-md mx-auto">
-          <p className="mb-4">{t("tour_step1")}</p>
-          <button
-            onClick={handleBack}
-            className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600"
-            aria-label="Back to Chat"
-          >
-            {t("back")}
-          </button>
-        </div>
-      )}
+      <MessageList messages={messages} handleAction={handleAction} />
+      <InputArea sendMessageAction={sendMessageAction} isPending={isPending} />
+      <div ref={chatEndRef} />
     </div>
   );
 };

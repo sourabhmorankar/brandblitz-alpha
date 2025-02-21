@@ -15,13 +15,12 @@ const ScheduleCallForm: React.FC<ScheduleCallFormProps> = ({ onBack }) => {
     const formData = new FormData(e.currentTarget);
     const slot = formData.get("slot") as string;
     console.log("Scheduled call:", slot);
-    // Placeholder for calendar integration in Phase 4
   };
 
   return (
-    <div className="flex flex-col p-4 text-white max-w-md mx-auto">
-      <h2 className="text-xl mb-4">{t("schedule_call")}</h2>
-      <p className="mb-4">{t("schedule_call_info")}</p>
+    <div className="flex flex-col p-4 text-white max-w-md mx-auto sm:p-6">
+      <h2 className="text-xl mb-4 fade-in">{t("schedule_call")}</h2>
+      <p className="mb-4 fade-in">{t("schedule_call_info")}</p>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="slot" className="block mb-1">
@@ -31,7 +30,7 @@ const ScheduleCallForm: React.FC<ScheduleCallFormProps> = ({ onBack }) => {
             id="slot"
             name="slot"
             required
-            className="w-full p-2 bg-gray-800 rounded text-white border-none focus:ring-2 focus:ring-brand-accent"
+            className="w-full p-2 bg-gray-800 rounded text-white border-none focus:ring-2 focus:ring-brand-accent hover:bg-gray-700 transition-colors"
             aria-label="Select a time slot"
           >
             <option value="">{t("choose_slot")}</option>
@@ -42,7 +41,7 @@ const ScheduleCallForm: React.FC<ScheduleCallFormProps> = ({ onBack }) => {
         <div className="flex gap-4">
           <button
             type="submit"
-            className="px-4 py-2 bg-brand-accent text-white rounded hover:bg-blue-700"
+            className="px-4 py-2 bg-brand-accent text-white rounded hover:bg-blue-700 transition-colors"
             aria-label="Schedule Call"
           >
             {t("schedule")}
@@ -50,7 +49,7 @@ const ScheduleCallForm: React.FC<ScheduleCallFormProps> = ({ onBack }) => {
           <button
             type="button"
             onClick={onBack}
-            className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600"
+            className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors"
             aria-label="Back to Chat"
           >
             {t("back")}

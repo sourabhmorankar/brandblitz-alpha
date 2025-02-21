@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 interface SignUpFormProps {
@@ -9,6 +9,7 @@ interface SignUpFormProps {
 
 const SignUpForm: React.FC<SignUpFormProps> = ({ onBack }) => {
   const { t } = useTranslation();
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -19,16 +20,17 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onBack }) => {
     const displayName = formData.get("displayName") as string;
 
     if (password !== confirmPassword) {
-      alert("Passwords don’t match!");
+      setError(t("password_mismatch"));
       return;
     }
+    setError(null);
     console.log("Sign Up:", { email, password, displayName });
-    // Placeholder for Firebase Auth integration in Phase 3
   };
 
   return (
-    <div className="flex flex-col p-4 text-white max-w-md mx-auto">
-      <h2 className="text-xl mb-4">{t("sign_up")}</h2>
+    <div className="flex flex-col p-4 text-white max-w-md mx-auto sm:p-6">
+      <h2 className="text-xl mb-4 fade-in">{t("sign_up")}</h2>
+      {error && <p className="text-red-500 mb-4 fade-in">{error}</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="email" className="block mb-1">
@@ -39,7 +41,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onBack }) => {
             id="email"
             name="email"
             required
-            className="w-full p-2 bg-gray-800 rounded text-white border-none focus:ring-2 focus:ring-brand-accent"
+            className="w-full p-2 bg-gray-800 rounded text-white border-none focus:ring-2 focus:ring-brand-accent hover:bg-gray-700 transition-colors"
             aria-label="Email"
           />
         </div>
@@ -53,7 +55,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onBack }) => {
             name="password"
             required
             minLength={8}
-            className="w-full p-2 bg-gray-800 rounded text-white border-none focus:ring-2 focus:ring-brand-accent"
+            className="w-full p-2 bg-gray-800 rounded text-white border-none focus:ring-2 focus:ring-brand-accent hover:bg-gray-700 transition-colors"
             aria-label="Password"
           />
         </div>
@@ -67,7 +69,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onBack }) => {
             name="confirmPassword"
             required
             minLength={8}
-            className="w-full p-2 bg-gray-800 rounded text-white border-none focus:ring-2 focus:ring-brand-accent"
+            className="w-full p-2 bg-gray-800 rounded text-white border-none focus:ring-2 focus:ring-brand-accent hover:bg-gray-700 transition-colors"
             aria-label="Confirm Password"
           />
         </div>
@@ -80,14 +82,14 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onBack }) => {
             id="displayName"
             name="displayName"
             required
-            className="w-full p-2 bg-gray-800 rounded text-white border-none focus:ring-2 focus:ring-brand-accent"
+            className="w-full p-2 bg-gray-800 rounded text-white border-none focus:ring-2 focus:ring-brand-accent hover:bg-gray-700 transition-colors"
             aria-label="Display Name"
           />
         </div>
         <div className="flex gap-4">
           <button
             type="submit"
-            className="px-4 py-2 bg-brand-accent text-white rounded hover:bg-blue-700"
+            className="px-4 py-2 bg-brand-accent text-white rounded hover:bg-blue-700 transition-colors"
             aria-label="Submit Sign Up"
           >
             {t("sign_up")}
@@ -95,10 +97,10 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onBack }) => {
           <button
             type="button"
             onClick={onBack}
-            className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600"
+            className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors"
             aria-label="Back to Chat"
           >
-            Back
+            {t("back")}
           </button>
         </div>
       </form>
