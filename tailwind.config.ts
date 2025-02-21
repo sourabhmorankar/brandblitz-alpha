@@ -9,8 +9,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        "brand-dark": "#1a202c", // Dark theme base
-        "brand-accent": "#3182ce", // Button/message accent
+        "brand-dark": "#111111", // Dark theme base
+        "brand-accent": "#222222", // Button/message accent
       },
     },
   },

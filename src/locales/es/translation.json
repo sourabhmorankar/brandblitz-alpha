@@ -1,4 +1,6 @@
 {
+  "initial_greeting": "¡Hola! Soy Blaze, tu asistente de diseño personal en BrandBlitz. Estamos aquí para hacer realidad tus sueños de diseño. Puedes preguntarme cualquier cosa o usar los botones a continuación para comenzar.",
+  "chat_header": "Chat de BrandBlitz - {{name}}",
   "welcome": "¡Hola! Soy Blaze, tu asistente de diseño para BrandBlitz. ¿Cómo puedo ayudarte hoy, {{name}}?",
   "sign_up": "Registrarse",
   "learn_more": "Saber Más",
@@ -28,5 +30,15 @@
   "tour_step2": "¡Envía una solicitud de diseño aquí mismo en el chat!",
   "tour_step3": "Gestiona tus proyectos y activos sin esfuerzo.",
   "folder_explorer_info": "Organiza tus activos de diseño aquí (disponible para suscriptores). ¡Próximamente!",
-  "loading": "Pensando..."
+  "loading": "Pensando",
+  "input_empty_error": "Por favor, ingresa un mensaje para enviar.",
+  "send_message_error": "No se pudo enviar el mensaje. Inténtalo de nuevo.",
+  "input_placeholder": "Pregúntame cualquier cosa...",
+  "input_aria_label": "Escribe tu mensaje",
+  "send_button_aria_label": "Enviar mensaje",
+  "sending": "Enviando...",
+  "user_message": "Mensaje del usuario",
+  "blaze_message": "Mensaje de Blaze",
+  "action_not_recognized": "Acción no reconocida.",
+  "unexpected_error": "Ocurrió un error inesperado. Por favor, intenta de nuevo."
 }
